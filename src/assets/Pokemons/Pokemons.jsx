@@ -1,32 +1,28 @@
-import React, { useEffect, useState } from 'react'
-import axios from 'axios';
-import styles from './Pokemons.module.css'
+import React, { useEffect, useState } from 'react';
+import styles from './Pokemons.module.css';
 
 function Pokemons() {
+  const [pokemons, setPokemons] = useState([]);
 
- const [pokemons , setPokemons] = useState([])
-
-  useEffect(() =>{
-    axios.get('https://pokeapi.co/api/v2/pokemon?limit=807&offset=0').then(res =>{
-      setPokemons((prevPokemons)=> [...prevPokemons, ...res.data.results])
-    }).catch((err)=> console.log(err))
-
-
-  },[])
-
-    console.log(pokemons);
+  useEffect(() => {
+    fetch('https://pokeapi.co/api/v2/pokemon?limit=807&offset=0')
+      .then(res => res.json())
+      .then(res => {
+        console.log(res);
+        setPokemons(res.results);
+      })
+      .catch(err => console.log(err));
+  }, []);
   return (
-   
     <div className={styles.pokemons}>
       <h1>Pokemons</h1>
-    <ul>
-    {pokemons.map((pokemon,index)=>{
-      return <li key={index}>{pokemon.name}</li>
-    })}</ul>
+      <ol>
+        {pokemons.map((pokemon, index) => {
+          return <li key={index}>{pokemon.name}</li>;
+        })}
+      </ol>
     </div>
-    
-   
-  )
+  );
 }
 
-export default Pokemons
+export default Pokemons;
